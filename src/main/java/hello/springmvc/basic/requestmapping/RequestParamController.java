@@ -1,10 +1,12 @@
 package hello.springmvc.basic.requestmapping;
 
+import hello.springmvc.basic.HelloData;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -98,7 +100,33 @@ public class RequestParamController {
         return "ok";
     }
 
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@RequestParam String username, @RequestParam int age) {
+        HelloData helloData = new HelloData();
+        helloData.setAge(10);
+        helloData.setUserName("hello");
 
+        log.info("username={}, age={}", helloData.getUserName(), helloData.getAge());
+        log.info("helloData={}", helloData);
+
+        return "ok";
+    }
+
+    /**
+     * @ModelAttribute 생략 가능
+     * String, int 같은 단순 타입 = @RequestParam
+     * argument resolver 로 지정해둔 타입 외 = @ModelAttribute */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+//    public String modelAttribute2(@ModelAttribute HelloData helloData) {
+    public String modelAttribute2(HelloData helloData) {
+
+        log.info("username={}, age={}", helloData.getUserName(), helloData.getAge());
+        log.info("helloData={}", helloData);
+
+        return "ok";
+    }
 
 
 }
